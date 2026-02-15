@@ -6,7 +6,7 @@ python -m optimize \
   --eval-model Qwen/Qwen2.5-0.5B-Instruct \
   --eval-temp 0.3 \
   --exec-model Qwen/Qwen2.5-0.5B-Instruct \
-  --exec-temp 0 \
+  --exec-temp 0.5 \
   --workspace "workspace" \
   --initial-round 1 \
   --max-rounds 3 \
