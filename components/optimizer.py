@@ -11,7 +11,8 @@ from prompts.optimize_prompt import PROMPT_OPTIMIZE_PROMPT
 from utils import load
 from utils.data_utils import DataUtils
 from utils.evaluation_utils import EvaluationUtils
-from utils.llm_client import SPO_LLM, RequestType, extract_content
+# from utils.llm_client import SPO_LLM, RequestType, extract_content
+from utils.llm_client_hf import SPO_LLM, RequestType, extract_content
 from utils.prompt_utils import PromptUtils
 from loguru import logger
 

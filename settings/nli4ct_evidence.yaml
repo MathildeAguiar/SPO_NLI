@@ -1,0 +1,20 @@
+prompt: | 
+
+Please determine if the following hypothesis entails or contradicts the given premise.  
+
+Ensure the response concludes with the answer in the XML format: <label>\[Entailment or Contradiction\]</label> <evidence>\[0,...\]</evidence>.
+
+requirements: | Answer only by giving the label (either “Entailment” or “Contradiction”) and the evidence indices as an array of indices of the premise sentences. 
+
+count: None
+
+qa:
+
+- question: |
+  ...
+  answer: |
+  ...
+- question: |
+  ...
+  answer: |
+  ...

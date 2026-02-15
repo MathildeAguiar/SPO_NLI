@@ -1,0 +1,12 @@
+llm:
+  api_type: "huggingface" #"openai"  # or azure / ollama / groq etc.
+  model: "Qwen/Qwen2.5-0.5B-Instruct" #"gpt-4-turbo"  # or gpt-3.5-turbo
+  base_url: "Qwen/Qwen2.5-0.5B-Instruct" #"https://api.openai.com/v1"  # or forward url / other llm url
+  api_key: "sk-xxx"
+
+models:
+ "Qwen/Qwen2.5-0.5B-Instruct": # model: "gpt-4-turbo"  # or gpt-3.5-turbo
+   api_type: "huggingface"  # or azure / ollama / groq etc.
+   base_url: "Qwen/Qwen2.5-0.5B-Instruct" #"https://api.openai.com/v1"
+   api_key: "sk-xxx"
+   temperature: 0

@@ -8,7 +8,8 @@ from typing import Any, Dict, Optional
 
 from prompts.evaluate_prompt import EVALUATE_PROMPT
 from utils import load
-from utils.llm_client import SPO_LLM, RequestType, extract_content
+# from utils.llm_client import SPO_LLM, RequestType, extract_content
+from utils.llm_client_hf import SPO_LLM, RequestType, extract_content
 from loguru import logger
 
 

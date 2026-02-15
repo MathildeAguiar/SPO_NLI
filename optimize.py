@@ -1,7 +1,8 @@
 import argparse
 
 from components.optimizer import PromptOptimizer
-from utils.llm_client import SPO_LLM
+# from utils.llm_client import SPO_LLM
+from utils.llm_client_hf import SPO_LLM
 
 
 def parse_args():
