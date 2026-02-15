@@ -124,26 +124,40 @@ class AsyncLLM:
     def __init__(self, config, system_msg: str = None, mode: str = "base_model"):
 
         if isinstance(config, str):
-            llm_name = config
-            config = LLMsConfig.default().get(llm_name)
+            config = LLMsConfig.default().get(config)
 
         self.config = config
-
-        self.client = AsyncInferenceClient(
-            model=self.config.model,
-            token=self.config.key
-        )
-
         self.sys_msg = system_msg
         self.mode = mode
         self.usage_tracker = TokenUsageTracker()
 
+        # Lazy model loading
+        self.pipe = None
         self.tokenizer = None
-        if AutoTokenizer:
-            try:
-                self.tokenizer = AutoTokenizer.from_pretrained(self.config.model)
-            except Exception:
-                pass
+        self.model = None
+
+    def _load_model(self):
+        if self.pipe is not None:
+            return
+
+        from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+        import torch
+
+        print(f"Loading local model: {self.config.model}")
+
+        self.tokenizer = AutoTokenizer.from_pretrained(self.config.model)
+
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.config.model,
+            torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+            device_map="auto"
+        )
+
+        self.pipe = pipeline(
+            "text-generation",
+            model=self.model,
+            tokenizer=self.tokenizer
+        )
 
     def _format_messages(self, messages):
         formatted = ""
@@ -163,21 +177,24 @@ class AsyncLLM:
 
     async def __call__(self, messages):
 
+        self._load_model()
+
         prompt = self._format_messages(messages)
 
-        result = await self.client.text_generation(
+        result = self.pipe(
             prompt,
+            max_new_tokens=512,
             temperature=self.config.temperature,
             top_p=self.config.top_p,
-            max_new_tokens=1024
-        )
+            do_sample=True
+        )[0]["generated_text"]
 
-        response_text = result.strip()
+        response_text = result[len(prompt):].strip()
 
         input_tokens = self._count_tokens(prompt)
         output_tokens = self._count_tokens(response_text)
 
-        usage_record = self.usage_tracker.add_usage(
+        self.usage_tracker.add_usage(
             self.config.model,
             input_tokens,
             output_tokens
@@ -188,24 +205,4 @@ class AsyncLLM:
         else:
             ret = response_text
 
-        print(f"Token usage: {input_tokens} + {output_tokens}")
         return ret
-
-    def get_usage_summary(self):
-        return self.usage_tracker.get_summary()
-
-
-def create_llm_instance(llm_config):
-
-    if isinstance(llm_config, LLMConfig):
-        return AsyncLLM(llm_config)
-
-    elif isinstance(llm_config, str):
-        return AsyncLLM(llm_config)
-
-    elif isinstance(llm_config, dict):
-        llm_config = LLMConfig(llm_config)
-        return AsyncLLM(llm_config)
-
-    else:
-        raise TypeError("llm_config must be an LLMConfig instance, a string, or a dictionary")
