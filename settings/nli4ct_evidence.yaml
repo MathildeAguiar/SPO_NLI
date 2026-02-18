@@ -1,20 +1,31 @@
 prompt: | 
+  Please determine if the following hypothesis entails or contradicts the given premise.  
+  Ensure the response concludes with the answer in the XML format: <label>\[Entailment or Contradiction\]</label> <primary_evidence>\[0,...\]</primary_evidence> <secondary_evidence>\[0,...\]</secondary_evidence>.
 
-Please determine if the following hypothesis entails or contradicts the given premise.  
-
-Ensure the response concludes with the answer in the XML format: <label>\[Entailment or Contradiction\]</label> <evidence>\[0,...\]</evidence>.
-
-requirements: | Answer only by giving the label (either “Entailment” or “Contradiction”) and the evidence indices as an array of indices of the premise sentences. 
+requirements: | 
+  Answer only by giving the label (either “Entailment” or “Contradiction”) and the evidence indices as an array of indices of the premise sentences, for the primary trial and, if it exists, the secondary trial. 
 
 count: None
 
 qa:
-
-- question: |
-  ...
-  answer: |
-  ...
-- question: |
-  ...
-  answer: |
-  ...
+  - question: |
+      Outcome Measurement:
+      Progression Free Survival
+      PFS is defined as the period from the day of randomization until the first observation of lesion progression or death from any cause. Disease progression is defined as PD according to RECIST Ver. 1.1.
+      Assessment period was from the day of randomisation until the first observation of lesion progression or death
+      Time frame: Baseline, every 6 weeks of study treatment period, and end of study
+      Results 1:
+      Arm/Group Title: NK105
+      Arm/Group Description: received NK105 (65 mg/m^2) on days 1, 8 and 15 of a 28-day cycle
+      Overall Number of Participants Analyzed: 211
+      Median (95% Confidence Interval)
+      Unit of Measure: months 8.4 (7.0 to 9.9)
+      Results 2:
+      Arm/Group Title: Paclitaxel
+      Arm/Group Description: received Paclitaxel (80 mg/m^2) on days 1, 8 and 15 of a 28-day cycle
+      Overall Number of Participants Analyzed: 211
+      Median (95% Confidence Interval)
+      Unit of Measure: months 8.5 (6.9 to 11.5)
+      Does this imply that "The shortest PFS in cohort 1 of the primary trial was less than 3 weeks"?
+    answer: |
+        <label> Contradiction <\label> <primary_evidence> \[0,1,2,3,4,5,6,7,8,9, 10\] <\primary_premise> <secondary_evidence> \[\] <secondary_evidence>
